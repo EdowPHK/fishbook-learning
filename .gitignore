@@ -1,1 +1,5 @@
 .vscode/
+fishbook-supporting-code/
+chpt3_neural-network/__pycache__/
+*.gz
+*.pkl
