@@ -1,5 +1,5 @@
 .vscode/
 fishbook-supporting-code/
-chpt3_neural-network/__pycache__/
-*.gz
+chpt3_neural-network-prediction/__pycache__
 *.pkl
+*.gz
