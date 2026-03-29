@@ -1,4 +1,7 @@
-from mnist import load_mnist
+import sys
+import os
+sys.path.append(os.getcwd())
+from dataset.mnist import load_mnist
 from PIL import Image
 import numpy as np
 import pickle
@@ -14,7 +17,7 @@ def get_data():
     return x_test, t_test
 
 def init_network():
-    with open("chpt3_neural-network/sample_weight.pkl", "rb") as f:
+    with open("chpt3_neural-network-prediction/sample_weight.pkl", "rb") as f:
         network = pickle.load(f)
 
     return network
