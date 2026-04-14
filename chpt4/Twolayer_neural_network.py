@@ -36,7 +36,7 @@ class TwoLayerNet:
         return cross_entropy_error_with_one_hot(y, t)
     
     def numerical_gradient(self, x, t):
-        loss_W = lambda W: self.loss(x, t)  # 返回函数loss_W = cross_entropy_error_with_one_hot(y, t)
+        loss_W = lambda W: self.loss(x, t)  # 返回函数loss_W = cross_entropy_error_with_one_hot(y, t)  # noqa: E731
 
         grads = {}
         grads = numerical_gradient(loss_W, self.params['W1'])
