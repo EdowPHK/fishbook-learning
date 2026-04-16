@@ -1,5 +1,5 @@
 .vscode/
-fishbook-supporting-code/
+fsbook_code/
 __pycache__/
 *.pkl
 *.gz
