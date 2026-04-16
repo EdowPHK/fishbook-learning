@@ -6,7 +6,7 @@
 每一步都沿着当前参数点的负梯度方向更新参数：
 
 $$
-	heta_{t+1} = \theta_t - \eta \nabla_\theta L(\theta_t)
+\theta_{t+1} = \theta_t - \eta \nabla_\theta L(\theta_t)
 $$
 
 - $\theta_t$：第 $t$ 次迭代的参数
@@ -38,7 +38,7 @@ v_{t+1} = \alpha v_t - \eta \nabla_\theta L(\theta_t)
 $$
 
 $$
-	heta_{t+1} = \theta_t + v_{t+1}
+\theta_{t+1} = \theta_t + v_{t+1}
 $$
 
 - $v_t$：速度（动量项）
@@ -75,7 +75,7 @@ h_{t+1} = h_t + g_t \odot g_t
 $$
 
 $$
-	heta_{t+1} = \theta_t - \eta \frac{g_t}{\sqrt{h_{t+1}} + \epsilon}
+\theta_{t+1} = \theta_t - \eta \frac{g_t}{\sqrt{h_{t+1}} + \epsilon}
 $$
 
 - $g_t = \nabla_\theta L(\theta_t)$：当前梯度
@@ -123,7 +123,7 @@ $$
 参数更新：
 
 $$
-	heta_{t+1} = \theta_t - \eta \frac{\hat{m}_t}{\sqrt{\hat{v}_t}+\epsilon}
+\theta_{t+1} = \theta_t - \eta \frac{\hat{m}_t}{\sqrt{\hat{v}_t}+\epsilon}
 $$
 
 - $m_t$：一阶矩估计（梯度均值）
@@ -152,3 +152,7 @@ theta = theta - lr * m_hat / (np.sqrt(v_hat) + 1e-8)
 ```
 
 ---
+
+# 权重初始化
+
+![alt text](W_initialization.png)

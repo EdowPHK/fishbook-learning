@@ -22,7 +22,7 @@ class Relu:
 
         return dx
     
-class sigmoid:
+class Sigmoid:
     def __init__(self):
         self.out = None
 
@@ -76,3 +76,9 @@ class SoftmaxWithLoss:
         dx = (self.y - self.t) / batch_size     # 保证梯度不随batch增大而增大
 
         return dx
+    
+class BatchNormalization:
+    def __init__(self):
+        pass
+
+    def forward(self, x):
