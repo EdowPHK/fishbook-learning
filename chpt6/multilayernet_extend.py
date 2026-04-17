@@ -30,9 +30,12 @@ class Multilayernet:
             if self.use_batchnormalization:
                 self.params['gamma' + str(idx)] = np.ones(hidden_size_list[idx-1])
                 self.params['beta' + str(idx)] = np.zeros(self.hidden_size_list[idx-1])
-                self.layers['Batchnorm' + str(idx)] = BatchNormalization
+                self.layers['Batchnorm' + str(idx)] = Layer.BatchNormalization(self.params['gamma' + str(idx)], self.params['beta' + str(idx)])
 
             self.layers['Activation' + str(idx)] = activation_layer[activation]()
+
+            if self.use_dropout:
+                self.layers['Dropout' + str(idx)] = Layer.Dropout(dropout_ration)
 
         idx = self.hidden_layer_num + 1
         self.layers['Affine' + str(idx)] = Layer.Affine(self.params['W' + str(idx)], self.params['b' + str(idx)])
@@ -50,13 +53,52 @@ class Multilayernet:
             self.params['W' + str(idx)] = scale * np.random.randn(all_size_list[idx-1], all_size_list[idx])
             self.params['b' + str(idx)] = np.zeros(all_size_list[idx])
 
-    def predict(self, x):
+    def predict(self, x, train_flg=False):
         for key, layer in self.layers.items():
-            x = layer.forward()
+            if "Dropout" in key or "BatchNorm" in key:
+                x = layer.forward(x, train_flg)
+            else:
+                x = layer.forward()
 
         return x
     
-    def loss(self, x, t):
+    def loss(self, x, t, train_flg=False):
         y = self.predict(x)
 
-        
+        weight_decay = 0
+        for idx in range(1, self.hidden_layer_num + 2):
+            W = self.params['W' + str(idx)]
+            weight_decay += 0.5 * self.weight_decay_lambda * np.sum(W**2)
+
+        return self.Last_layer.forward(y, t) + weight_decay
+
+    def accuracy(self, X, T):
+        Y = self.predict(X, train_flg=False)
+        Y = np.argmax(Y, axis=1)
+        if T.ndim != 1:
+            T = np.argmax(T, axis=1)
+
+        accuracy = np.sum(Y == T) / float(X.shape[0])
+        return accuracy
+    
+    def gradient(self, x, t):
+        self.loss(x, t, train_flg=True)
+
+        dout = 1
+        dout = self.Last_layer.backward(dout)
+
+        layers = list(self.layers.values())
+        layers.reverse()
+        for layer in layers:
+            dout = layer.backward(dout)
+
+        grads = {}
+        for idx in range(1, self.hidden_layer_num+2):
+            grads['W' + str(idx)] = self.layers['Affine' + str(idx)].dW + self.weight_decay_lambda * self.params['W' + str(idx)]
+            grads['b' + str[idx]] = self.layers['Affine' + str(idx)].db
+
+            if self.use_batchnormalization and idx != self.hidden_layer_num+1:
+                grads['gamma'+ str(idx)] = self.layers['BatchNorm' + str(idx)].dgamma
+                grads['beta' + str(idx)] = self.layers['BatchNorm' + str(idx).dbeta]
+
+        return grads
